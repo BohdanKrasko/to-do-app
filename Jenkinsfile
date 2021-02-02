@@ -3,7 +3,6 @@ pipeline {
   
   stages {
 
-    
     stage('Echo') {
       steps {
         sh "echo tytyyty"
