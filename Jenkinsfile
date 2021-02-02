@@ -12,6 +12,9 @@ pipeline {
   stages {
 
     stage('Echo') {
+      when {
+        expression { params.REQUESTED_ACTION == 'test'}
+      }
       steps {
         sh "echo imposible"
       }
