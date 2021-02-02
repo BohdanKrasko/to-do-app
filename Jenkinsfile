@@ -11,12 +11,21 @@ pipeline {
   }
   stages {
 
-    stage('Echo') {
+    stage('Clean workspace') {
       when {
-        expression { params.REQUESTED_ACTION == 'test'}
+        expression { params.REQUESTED_ACTION == 'deploy'}
       }
       steps {
-        sh "echo imposible"
+        cleanWs()
+      }
+    }
+    
+    stage('Pull from github') {
+      when {
+        expression { params.REQUESTED_ACTION == 'deploy'}
+      }
+      steps {
+        git([url: 'https://github.com/BohdanKrasko/to-do-app', branch: 'main', credentialsId: 'to-do-app-github'])
       }
     }
   }
