@@ -5,7 +5,7 @@ pipeline {
 
     stage('Echo') {
       steps {
-        sh "echo tytyyty"
+        sh "echo imposible"
       }
     }
   }
