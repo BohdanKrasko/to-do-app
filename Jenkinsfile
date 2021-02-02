@@ -7,7 +7,7 @@ pipeline {
       choices: ['deploy', 'destroy', 'test'],
       description: '',
       name: 'REQUESTED_ACTION'
-    )
+    ) 
   }
   stages {
 
