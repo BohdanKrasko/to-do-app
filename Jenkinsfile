@@ -12,5 +12,9 @@ pipeline {
                   userRemoteConfigs: [[credentialsId: 'to-do-app-github', url: 'https://github.com/BohdanKrasko/to-do-app']]]) 
       }
     }
+    
+    stage('Echo') {
+      sh "echo tytyyty"
+    }
   }
 }
