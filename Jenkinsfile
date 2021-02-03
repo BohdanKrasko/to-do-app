@@ -2,7 +2,7 @@ pipeline {
   
   agent any
   
-  enviroment {
+  environment {
     registry = "krasko"
     registryCredentials = "nexus"
     dockerImage = ''
