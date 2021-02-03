@@ -2,6 +2,11 @@ pipeline {
   
   agent any
   
+  enviroment {
+    registry = "krasko"
+    registryCredentials = "nexus"
+    dockerImage = ''
+  }
   parameters {
     choice (
       choices: ['deploy', 'destroy', 'test'],
@@ -17,6 +22,7 @@ pipeline {
       }
       steps {
         cleanWs()
+        sh 'echo kjkl'
       }
     }
     
