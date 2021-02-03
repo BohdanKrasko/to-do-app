@@ -22,7 +22,6 @@ pipeline {
       }
       steps {
         cleanWs()
-        sh 'echo kjkl'
       }
     }
     
@@ -32,6 +31,19 @@ pipeline {
       }
       steps {
         git([url: 'https://github.com/BohdanKrasko/to-do-app', branch: 'main', credentialsId: 'to-do-app-github'])
+      }
+    }
+    
+    stage('Build frontend image') {
+      when {
+        expression { params.REQUESTED_ACTION == 'deploy'}
+      }
+      steps {
+        script {
+          dir('app/client') {
+            dockerOmage = docker.build registry + "/frontend" + ":$Build_NUMBER"
+          }
+        }
       }
     }
   }
