@@ -3,8 +3,8 @@ pipeline {
   agent any
   
   environment {
-    registry = "krasko"
-    registryCredentials = "nexus"
+    registry = "nexus:8082/repository/krasko"
+    registryCredentials = "nexus_cred"
     dockerImage = ''
   }
   parameters {
@@ -41,8 +41,20 @@ pipeline {
       steps {
         script {
           dir('app/client') {
-            dockerOmage = docker.build registry + "/frontend" + ":$Build_NUMBER"
+            dockerOmage = docker.build registry + ":frontend/" + "$BUILD_NUMBER"
           }
+        }
+      }
+    }
+    
+    stage('Deploy frontend image') {
+      when {
+        expression { params.REQUESTED_ACTION == 'deploy'}
+      }
+      steps {
+        script {
+          docker.withRegistry( '', registryCredential ) {
+          dockerImage.push()
         }
       }
     }
