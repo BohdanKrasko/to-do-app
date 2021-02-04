@@ -41,7 +41,7 @@ pipeline {
       steps {
         script {
           dir('app/client') {
-            dockerOmage = docker.build registry + ":frontend_" + "$BUILD_NUMBER"
+            dockerImage = docker.build registry + ":frontend_" + "$BUILD_NUMBER"
           }
         }
       }
