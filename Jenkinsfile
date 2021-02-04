@@ -47,16 +47,5 @@ pipeline {
       }
     }
     
-    stage('Deploy frontend image') {
-      when {
-        expression { params.REQUESTED_ACTION == 'deploy'}
-      }
-      steps {
-        script {
-          docker.withRegistry( '', registryCredential ) {
-          dockerImage.push()
-        }
-      }
-    }
   }
 }
