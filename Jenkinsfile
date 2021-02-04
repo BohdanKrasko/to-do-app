@@ -52,7 +52,7 @@ pipeline {
       }
       steps {
         script {
-          docker.withRegistry( 'http://127.0.0.1:8082', registryCredential ) {
+          docker.withRegistry( 'http://nexus:8082', registryCredential ) {
           dockerImage.push()
         }
       }
