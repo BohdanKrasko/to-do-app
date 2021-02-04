@@ -3,7 +3,7 @@ pipeline {
   agent any
   
   environment {
-    registry = "nexus:8082/repository/krasko"
+    registry = "127.0.0.1:8082/repository/krasko"
     registryCredential = "nexus_cred"
     dockerImage = ''
   }
