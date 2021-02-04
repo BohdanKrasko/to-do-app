@@ -18,3 +18,8 @@ RUN curl -o docker-ce-cli.deb https://download.docker.com/linux/debian/dists/str
 
 # Switch back to jenkins user
 USER jenkins
+
+
+#SonarQube
+
+docker run -d --name sonarqube -p 9000:9000 -p 9092:9092 sonarqube
