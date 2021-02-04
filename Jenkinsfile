@@ -34,24 +34,18 @@ pipeline {
       }
     }
     
-    stage('Build frontend image') {
+
+    stage('Deploy frontend image') {
       when {
         expression { params.REQUESTED_ACTION == 'deploy'}
       }
       steps {
         script {
+          
           dir('app/client') {
             dockerImage = docker.build registry + ":frontend_" + "$BUILD_NUMBER"
           }
-        }
-      }
-    }
-        stage('Deploy frontend image') {
-      when {
-        expression { params.REQUESTED_ACTION == 'deploy'}
-      }
-      steps {
-        script {
+          
           docker.withRegistry( 'http://127.0.0.1:8082', registryCredential ) {
             dockerImage.push()
         }
