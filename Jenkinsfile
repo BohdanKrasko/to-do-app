@@ -4,7 +4,7 @@ pipeline {
   
   environment {
     registry = "127.0.0.1:8082/repository/krasko"
-    registryCredential = "nexus_cred"
+    registryCredential = "cred"
     dockerImage = ''
   }
   parameters {
