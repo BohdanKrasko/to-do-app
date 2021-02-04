@@ -48,9 +48,27 @@ pipeline {
           
           docker.withRegistry( 'http://127.0.0.1:8082', registryCredential ) {
             dockerImage.push()
+          }
+        }
+      }
+    }
+    
+    stage('Deploy backend image') {
+      when {
+        expression { params.REQUESTED_ACTION == 'deploy'}
+      }
+      steps {
+        script {
+          
+          dir('app/go-server') {
+            dockerImage = docker.build registry + ":backend_" + "$BUILD_NUMBER"
+          }
+          
+          docker.withRegistry( 'http://127.0.0.1:8082', registryCredential ) {
+            dockerImage.push()
+          }
         }
       }
     }
   }
-}
 }
