@@ -6,6 +6,7 @@ pipeline {
     registry = "127.0.0.1:8082/repository/krasko"
     registryCredential = "cred"
     dockerImage = ''
+    SONARQUBE_LOGN_PROJECT = credentials('sonarqube_login_project')
   }
   parameters {
     choice (
@@ -78,7 +79,7 @@ pipeline {
       steps {
         withSonarQubeEnv('sonarqube') {
             
-            sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=project -Dsonar.sources=. -Dsonar.host.url=http://sonarqube:9000/ -Dsonar.login=5b8775287636bf81aea706e8eec91979e86f8d01"
+            sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=project -Dsonar.sources=. -Dsonar.host.url=http://sonarqube:9000/ -Dsonar.login=$SONARQUBE_LOGN_PROJECT"
              
         }
       }
