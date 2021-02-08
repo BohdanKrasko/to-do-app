@@ -3,16 +3,19 @@ kind: Deployment
 metadata:
   name: mongo-deployment
   labels:
-    app: mongo
+    app: todo
+    tier: mongo
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: mongo
+      app: todo
+      tier: mongo
   template:
     metadata:
       labels:
-        app: mongo
+        app: todo
+        tier: mongo
     spec:
       containers:
         - name: mongodb
@@ -28,7 +31,8 @@ metadata:
   name: mongo
 spec:
   selector:
-    app: mongo
+    app: todo
+    tier: mongo
   ports:
     - protocol: TCP
       port: 27017
