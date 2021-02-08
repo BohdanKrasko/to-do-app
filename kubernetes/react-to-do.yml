@@ -3,22 +3,25 @@ kind: Deployment
 metadata:
   name: frontend-to-do-deployment
   labels:
-    app: frontend-to-do
+    app: todo
+    tier: frontend-to-do
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: frontend-to-do
+      app: todo
+      tier: frontend-to-do
   template:
     metadata:
       labels:
-        app: frontend-to-do
+        app: todo
+        tier: frontend-to-do
     spec:
       containers:
         - name: frontend-to-do
-          image: kraskobohdan/to-do-app:backend
+          image: kraskobohdan/to-do-app:monday
           ports:
-            - containerPort: 3000
+            - containerPort: 80
 
 ---
 
@@ -28,12 +31,10 @@ metadata:
   name: frontend-to-do
 spec:
   selector:
-    app: frontend-to-do
+    app: todo
+    tier: frontend-to-do
   type: LoadBalancer
-  externalIPs:
-  - 10.1.243.192
   ports:
     - protocol: TCP
-      port: 3000
-      targetPort: 3000
-      nodePort: 30000
+      port: 80
+      targetPort: 80
