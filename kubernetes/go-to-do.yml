@@ -3,16 +3,19 @@ kind: Deployment
 metadata:
   name: backend-to-do-deployment
   labels:
-    app: backend-to-do
+    app: todo
+    tier: backend-to-do
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: backend-to-do
+      app: todo
+      tier: backend-to-do
   template:
     metadata:
       labels:
-        app: backend-to-do
+        app: todo
+        tier: backend-to-do
     spec:
       containers:
         - name: backend-to-do
@@ -28,7 +31,8 @@ metadata:
   name: backend-to-do
 spec:
   selector:
-    app: backend-to-do
+    app: todo
+    tier: backend-to-do
   ports:
     - protocol: TCP
       port: 8080
