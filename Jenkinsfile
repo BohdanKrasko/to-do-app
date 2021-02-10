@@ -49,7 +49,7 @@ pipeline {
  //         script: 'cat /var/jenkins_home/workspace/to-do-app_main/terraform/kubeconfig_my-cluster'
  //       )
      
-              foo = sh(
+              KUBECONFIG = sh(
                 returnStdout: true, 
                 script: 'echo "$(cat /var/jenkins_home/workspace/to-do-app_main/terraform/kubeconfig_my-cluster)"'
               )
@@ -70,7 +70,8 @@ pipeline {
   //            kubectl get pods
   //            """
             sh 'echo dkj'
-            sh 'echo $foo'
+            sh 'echo $KUBECONFIG'
+            sh 'kubectl get pods'
   //          )
           }
         }
