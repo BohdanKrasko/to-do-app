@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
         - name: frontend-to-do
-          image: kraskobohdan/to-do-app:monday
+          image: kraskobohdan/to-do-app:nice
           ports:
             - containerPort: 80
 
@@ -33,7 +33,7 @@ spec:
   selector:
     app: todo
     tier: frontend-to-do
-  type: LoadBalancer
+  #type: LoadBalancer
   ports:
     - protocol: TCP
       port: 80
