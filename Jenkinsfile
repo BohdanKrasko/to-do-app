@@ -42,25 +42,26 @@ pipeline {
       when {
         expression { params.REQUESTED_ACTION == 'deploy'}
       }
-      environment { 
-        //KUBECONFIG= sh (returnStdout: true, script: 'echo "$(cat /var/jenkins_home/workspace/to-do-app_main/terraform/kubeconfig_my-cluster)"')
-        foo = sh(
-          returnStdout: true, 
-          script: 'cat /var/jenkins_home/workspace/to-do-app_main/terraform/kubeconfig_my-cluster'
-        )
-      }
+ //     environment { 
+ //       //KUBECONFIG= sh (returnStdout: true, script: 'echo "$(cat /var/jenkins_home/workspace/to-do-app_main/terraform/kubeconfig_my-cluster)"')
+ //       foo = sh(
+ //         returnStdout: true, 
+ //         script: 'cat /var/jenkins_home/workspace/to-do-app_main/terraform/kubeconfig_my-cluster'
+ //       )
+ //    }
       steps {
         dir('terraform') {
           withAWS(credentials:'aws_cred', region:'eu-west-3') {
   //        sh 'terraform init'
   //        sh 'terraform plan'
   //        sh 'terraform apply -auto-approve'
-            sh (
-              label: "Kube",
-              script: """#!/usr/bin/env bash
-              echo $foo
-              kubectl get pods
-              """
+  //          sh (
+  //            label: "Kube",
+  //            script: """#!/usr/bin/env bash
+  //            echo $foo
+  //            kubectl get pods
+  //            """
+            sh 'cat /var/jenkins_home/workspace/to-do-app_main/terraform/kubeconfig_my-cluster'
             )
           }
         }
