@@ -48,7 +48,7 @@ pipeline {
           withAWS(credentials:'aws_cred', region:'eu-west-3') {
             sh 'terraform init'
             sh 'terraform plan'
-            sh 'terrafomr apply -auto-approve'
+            sh 'terraform apply -auto-approve'
           }
         }
       }
