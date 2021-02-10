@@ -42,44 +42,38 @@ pipeline {
       when {
         expression { params.REQUESTED_ACTION == 'deploy'}
       }
-      environment { 
- //       //KUBECONFIG= sh (returnStdout: true, script: 'echo "$(cat /var/jenkins_home/workspace/to-do-app_main/terraform/kubeconfig_my-cluster)"')
- //       foo = sh(
- //         returnStdout: true, 
- //         script: 'cat /var/jenkins_home/workspace/to-do-app_main/terraform/kubeconfig_my-cluster'
- //       )
-     
-              KUBECONFIG = sh(
-                returnStdout: true, 
-                script: 'echo "$(cat /var/jenkins_home/workspace/to-do-app_main/terraform/kubeconfig_my-cluster)"'
-              )
-            
-     }
-
       steps {
         
         dir('terraform') {
           withAWS(credentials:'aws_cred', region:'eu-west-3') {
-  //        sh 'terraform init'
-  //        sh 'terraform plan'
-  //        sh 'terraform apply -auto-approve'
-  //          sh (
-  //            label: "Kube",
-  //            script: """#!/usr/bin/env bash
-  //            echo $foo
-  //            kubectl get pods
-  //            """
-            withEnv(["KUBECONFIG=/var/jenkins_home/workspace/to-do-app_main/terraform/kubeconfig_my-cluster"]) {
-              // Your stuff here
-              sh 'kubectl get pods'
-            }
-            
-  //          )
+            sh 'terraform init'
+            sh 'terraform plan'
+            sh 'terraform apply -auto-approve'
           }
         }
       }
     }
-
     
+    stage('Deploy todo app in EKS cluster') {
+      when {
+        expression { params.REQUESTED_ACTION == 'deploy'}
+      }
+    }
+    steps {
+      dir('kubernetes') {
+        withAWS(credentials:'aws_cred', region:'eu-west-3') {
+          withEnv(["KUBECONFIG=/var/jenkins_home/workspace/to-do-app_main/terraform/kubeconfig_my-cluster"]) {
+            sh (
+              label: 'Run app'
+              script: """#!/usr/bin/bash            
+              helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+              helm repo update
+              helm install ingress-nginx ingress-nginx/ingress-nginx
+              """
+            )
+          }
+        }
+      }
+    }
   }
 }
