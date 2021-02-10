@@ -4,7 +4,7 @@ metadata:
   name: dashboard-ingress
 spec:
   rules:
-  - host: dashboard.com
+  - host: ekstodoapp.tk
     http:
       paths:
       - path: /
