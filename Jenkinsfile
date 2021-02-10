@@ -38,27 +38,29 @@ pipeline {
 //      git([url: 'https://github.com/BohdanKrasko/to-do-app', branch: 'main', credentialsId: 'to-do-app-github'])
 //    }
 //  }  
-    stage('Terrafom') {
-      when {
-        expression { params.REQUESTED_ACTION == 'deploy'}
-      }
-      steps {
-        
-        dir('terraform') {
-          withAWS(credentials:'aws_cred', region:'eu-west-3') {
-            sh 'terraform init'
-            sh 'terraform plan'
-            sh 'terraform apply -auto-approve'
-          }
-        }
-      }
-    }
+
+//    stage('Terrafom') {
+//      when {
+//        expression { params.REQUESTED_ACTION == 'deploy'}
+//      }
+//      steps {
+//        
+//        dir('terraform') {
+//          withAWS(credentials:'aws_cred', region:'eu-west-3') {
+//            sh 'terraform init'
+//            sh 'terraform plan'
+//            sh 'terraform apply -auto-approve'
+//         }
+//        }
+//      }
+//    }
     
     stage('Deploy todo app in EKS cluster') {
       when {
         expression { params.REQUESTED_ACTION == 'deploy'}
       }
       steps {
+        dir('kubernetes') {
         withAWS(credentials:'aws_cred', region:'eu-west-3') {
           withEnv(["KUBECONFIG=/var/jenkins_home/workspace/to-do-app_main/terraform/kubeconfig_my-cluster"]) {
             sh (
@@ -67,13 +69,15 @@ pipeline {
               helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
               helm repo update
               helm install ingress-nginx ingress-nginx/ingress-nginx
-              kubectl apply -f kubernetes
+              kubectl apply -f app
+              sleep(time:10, unit:"SECONDS")
+              kubectl apply -f ingress
               """
             )
           }
         }
       }
     }
-
+    }
   }
 }
