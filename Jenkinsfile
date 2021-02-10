@@ -62,15 +62,14 @@ pipeline {
       dir('kubernetes') {
         withAWS(credentials:'aws_cred', region:'eu-west-3') {
           withEnv(["KUBECONFIG=/var/jenkins_home/workspace/to-do-app_main/terraform/kubeconfig_my-cluster"]) {
-            sh 'helm'
-//            sh (
-//              label: 'Run app',
-//              script: """#!/usr/bin/bash            
-//              helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
-//              helm repo update
-//              helm install ingress-nginx ingress-nginx/ingress-nginx
-//              """
-//            )
+            sh (
+              label: 'Run app',
+              script: """#!/usr/bin/env bash            
+              helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+              helm repo update
+              helm install ingress-nginx ingress-nginx/ingress-nginx
+              """
+            )
           }
         }
       }
