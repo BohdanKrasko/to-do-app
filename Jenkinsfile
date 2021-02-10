@@ -49,11 +49,12 @@ pipeline {
  //         script: 'cat /var/jenkins_home/workspace/to-do-app_main/terraform/kubeconfig_my-cluster'
  //       )
  //    }
-      steps {
-        foo = sh(
+      foo = sh(
               returnStdout: true, 
               script: 'cat /var/jenkins_home/workspace/to-do-app_main/terraform/kubeconfig_my-cluster'
             )
+      steps {
+        
         dir('terraform') {
           withAWS(credentials:'aws_cred', region:'eu-west-3') {
   //        sh 'terraform init'
