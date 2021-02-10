@@ -58,8 +58,7 @@ pipeline {
       when {
         expression { params.REQUESTED_ACTION == 'deploy'}
       }
-    }
-    steps {
+      steps {
       dir('kubernetes') {
         withAWS(credentials:'aws_cred', region:'eu-west-3') {
           withEnv(["KUBECONFIG=/var/jenkins_home/workspace/to-do-app_main/terraform/kubeconfig_my-cluster"]) {
@@ -75,5 +74,7 @@ pipeline {
         }
       }
     }
+    }
+
   }
 }
