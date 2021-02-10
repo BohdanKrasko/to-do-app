@@ -50,7 +50,7 @@ pipeline {
   //        sh 'terraform plan'
   //        sh 'terraform apply -auto-approve'
             sh (
-              label: "Kube"
+              label: "Kube",
               script: """#!/usr/bin/env bash
               export KUBECONFIG=/var/jenkins_home/workspace/to-do-app_main/terraform/kubeconfig_my-cluster
               echo $KUBECONFIG
