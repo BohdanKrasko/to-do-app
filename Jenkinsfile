@@ -81,9 +81,11 @@ pipeline {
 //  }
   
     stage('Add A record') {
-      script {
+      steps {
+        script {
         withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'aws-key', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY']]) {
         AWS("--region=eu-west-3 s3  ls")
+      }
       }
       }
       
