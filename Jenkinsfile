@@ -46,7 +46,7 @@ pipeline {
         //KUBECONFIG= sh (returnStdout: true, script: 'echo "$(cat /var/jenkins_home/workspace/to-do-app_main/terraform/kubeconfig_my-cluster)"')
         foo = sh(
           returnStdout: true, 
-          script: 'echo kjfldj'
+          script: 'cat /var/jenkins_home/workspace/to-do-app_main/terraform/kubeconfig_my-cluster'
         )
       }
       steps {
