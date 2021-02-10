@@ -65,7 +65,12 @@ pipeline {
           withEnv(["KUBECONFIG=/var/jenkins_home/workspace/to-do-app_main/terraform/kubeconfig_my-cluster"]) {
             sh (
               label: 'Run app',
-              script: """#!/usr/bin/env bash            
+              script: """#!/usr/bin/env bash 
+              helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+              helm repo update
+              helm install ingress-nginx ingress-nginx/ingress-nginx
+              kubectl apply -f app
+              sleep 30
               kubectl apply -f ingress
               """
             )
