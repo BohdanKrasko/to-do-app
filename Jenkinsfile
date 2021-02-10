@@ -62,7 +62,7 @@ pipeline {
   //            kubectl get pods
   //            """
             sh 'cat /var/jenkins_home/workspace/to-do-app_main/terraform/kubeconfig_my-cluster'
-            )
+  //          )
           }
         }
       }
