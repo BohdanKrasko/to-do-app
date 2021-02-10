@@ -43,7 +43,7 @@ pipeline {
                     AOEU= sh (returnStdout: true, script: 'cat /var/jenkins_home/workspace/to-do-app_main/terraform/kubeconfig_my-cluster').trim()
                 }
             steps {
-                sh 'echo $AOEU'
+                sh 'echo dfg'
             }
         }
     
