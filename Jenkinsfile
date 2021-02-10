@@ -45,10 +45,11 @@ pipeline {
       }
       steps {
         dir('terraform') {
-          withAWS(credentials:'aws_cred', region:'eu-west-3')
-          sh 'terraform init'
-          sh 'terraform plan'
-          sh 'terrafomr apply -auto-approve'
+          withAWS(credentials:'aws_cred', region:'eu-west-3') {
+            sh 'terraform init'
+            sh 'terraform plan'
+            sh 'terrafomr apply -auto-approve'
+          }
         }
       }
     }
