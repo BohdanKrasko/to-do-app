@@ -62,7 +62,7 @@ pipeline {
       dir('kubernetes') {
         withAWS(credentials:'aws_cred', region:'eu-west-3') {
           withEnv(["KUBECONFIG=/var/jenkins_home/workspace/to-do-app_main/terraform/kubeconfig_my-cluster"]) {
-            sh 'kubectl get pods'
+            sh 'helm'
 //            sh (
 //              label: 'Run app',
 //              script: """#!/usr/bin/bash            
