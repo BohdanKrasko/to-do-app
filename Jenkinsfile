@@ -55,29 +55,38 @@ pipeline {
 //      }
 //    }
     
-    stage('Deploy todo app in EKS cluster') {
-      when {
-        expression { params.REQUESTED_ACTION == 'deploy'}
+//    stage('Deploy todo app in EKS cluster') {
+//      when {
+//        expression { params.REQUESTED_ACTION == 'deploy'}
+//      }
+//      steps {
+//        dir('kubernetes') {
+//        withAWS(credentials:'aws_cred', region:'eu-west-3') {
+//          withEnv(["KUBECONFIG=/var/jenkins_home/workspace/to-do-app_main/terraform/kubeconfig_my-cluster"]) {
+//            sh (
+//              label: 'Run app',
+//              script: """#!/usr/bin/env bash 
+//              helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+//              helm repo update
+//              helm install ingress-nginx ingress-nginx/ingress-nginx
+//            kubectl apply -f app
+//            sleep 30
+//            kubectl apply -f ingress
+//            """
+//          )
+//        }
+//      }
+//    }
+//  }
+//  }
+  
+    stage('Add A record') {
+      script {
+        withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'aws-key', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY']]) {
+        AWS("--region=eu-west-3 s3  ls")
       }
-      steps {
-        dir('kubernetes') {
-        withAWS(credentials:'aws_cred', region:'eu-west-3') {
-          withEnv(["KUBECONFIG=/var/jenkins_home/workspace/to-do-app_main/terraform/kubeconfig_my-cluster"]) {
-            sh (
-              label: 'Run app',
-              script: """#!/usr/bin/env bash 
-              helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
-              helm repo update
-              helm install ingress-nginx ingress-nginx/ingress-nginx
-              kubectl apply -f app
-              sleep 30
-              kubectl apply -f ingress
-              """
-            )
-          }
-        }
       }
-    }
+      
     }
   }
 }
