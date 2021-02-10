@@ -37,19 +37,13 @@ pipeline {
 //    steps {
 //      git([url: 'https://github.com/BohdanKrasko/to-do-app', branch: 'main', credentialsId: 'to-do-app-github'])
 //    }
-//  }
-    stage('Build') {
-            environment { 
-                    AOEU= sh (returnStdout: true, script: 'cat /var/jenkins_home/workspace/to-do-app_main/terraform/kubeconfig_my-cluster').trim()
-                }
-            steps {
-                sh 'echo dfg'
-            }
-        }
-    
+//  }  
     stage('Terrafom') {
       when {
         expression { params.REQUESTED_ACTION == 'deploy'}
+      }
+      environment { 
+        KUBECONFIG= sh (returnStdout: true, script: 'cat /var/jenkins_home/workspace/to-do-app_main/terraform/kubeconfig_my-cluster').trim()
       }
       steps {
         dir('terraform') {
@@ -60,7 +54,7 @@ pipeline {
             sh (
               label: "Kube",
               script: """#!/usr/bin/env bash
-              export KUBECONFIG=/var/jenkins_home/workspace/to-do-app_main/terraform/kubeconfig_my-cluster
+              
               echo $KUBECONFIG
               kubectl get pods
               """
