@@ -43,7 +43,11 @@ pipeline {
         expression { params.REQUESTED_ACTION == 'deploy'}
       }
       environment { 
-        KUBECONFIG= sh (returnStdout: true, script: 'echo "$(cat /var/jenkins_home/workspace/to-do-app_main/terraform/kubeconfig_my-cluster)"')
+        //KUBECONFIG= sh (returnStdout: true, script: 'echo "$(cat /var/jenkins_home/workspace/to-do-app_main/terraform/kubeconfig_my-cluster)"')
+        foo = sh(
+          returnStdout: true, 
+          script: 'date'
+        )
       }
       steps {
         dir('terraform') {
@@ -54,6 +58,7 @@ pipeline {
             sh (
               label: "Kube",
               script: """#!/usr/bin/env bash
+              echo $foo
               kubectl get pods
               """
             )
