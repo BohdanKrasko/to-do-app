@@ -15,6 +15,10 @@ pipeline {
       name: 'REQUESTED_ACTION'
     )
   }
+  
+  tools {
+    terraform 'Terraform'
+  }
   stages {
 
     stage('Clean workspace') {
@@ -35,54 +39,17 @@ pipeline {
       }
     }
     
+    stage('Terrafom') {
+      when {
+        expression { params.REQUESTED_ACTION == 'deploy'}
+      }
+      steps {
+        dir('terraform') {
+          sh 'terraform plan'
+        }
+      }
+    }
 
-    stage('Deploy frontend image') {
-      when {
-        expression { params.REQUESTED_ACTION == 'deploy'}
-      }
-      steps {
-        script {
-          
-          dir('app/client') {
-            dockerImage = docker.build registry + ":frontend_" + "$BUILD_NUMBER"
-          }
-          
-          docker.withRegistry( 'http://127.0.0.1:8082', registryCredential ) {
-            dockerImage.push()
-          }
-        }
-      }
-    }
     
-    stage('Deploy backend image') {
-      when {
-        expression { params.REQUESTED_ACTION == 'deploy'}
-      }
-      steps {
-        script {
-          
-          dir('app/go-server') {
-            dockerImage = docker.build registry + ":backend_" + "$BUILD_NUMBER"
-          }
-          
-          docker.withRegistry( 'http://127.0.0.1:8082', registryCredential ) {
-            dockerImage.push()
-          }
-        }
-      }
-    }
-    
-    stage('Sonarqube') {
-      environment {
-        scannerHome = tool 'SonarQubeScanner'
-      }
-      steps {
-        withSonarQubeEnv('sonarqube') {
-            
-            sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=project -Dsonar.sources=. -Dsonar.host.url=http://sonarqube:9000/ -Dsonar.login=$SONARQUBE_LOGN_PROJECT"
-             
-        }
-      }
-    }
   }
 }
