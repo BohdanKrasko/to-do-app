@@ -1,9 +1,3 @@
-provider "aws" {
-  region                  = "eu-west-3"
-  shared_credentials_file = "~/.aws/credentials"
-  profile                 = "default"
-}
-
 #resource "aws_key_pair" "main" {
 #  key_name = "eks_key"
 #  public_key = file("~/.ssh/eks_key.pub")
