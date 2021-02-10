@@ -42,13 +42,21 @@ pipeline {
       when {
         expression { params.REQUESTED_ACTION == 'deploy'}
       }
- //     environment { 
+      environment { 
  //       //KUBECONFIG= sh (returnStdout: true, script: 'echo "$(cat /var/jenkins_home/workspace/to-do-app_main/terraform/kubeconfig_my-cluster)"')
  //       foo = sh(
  //         returnStdout: true, 
  //         script: 'cat /var/jenkins_home/workspace/to-do-app_main/terraform/kubeconfig_my-cluster'
  //       )
- //    }
+        script {
+              foo = sh(
+                returnStdout: true, 
+                script: 'echo "$(cat /var/jenkins_home/workspace/to-do-app_main/terraform/kubeconfig_my-cluster)"'
+              )
+              sh 'echo dsfhkdj'
+              sh 'echo $foo'
+            }
+     }
 
       steps {
         
@@ -63,15 +71,8 @@ pipeline {
   //            echo $foo
   //            kubectl get pods
   //            """
-            script {
-              foo = sh(
-                returnStdout: true, 
-                script: 'echo "$(cat /var/jenkins_home/workspace/to-do-app_main/terraform/kubeconfig_my-cluster)"'
-              )
-              sh 'echo dsfhkdj'
-              sh 'echo $foo'
-            }
-            
+            sh 'echo dkj'
+            sh 'echo $foo'
   //          )
           }
         }
