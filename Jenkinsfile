@@ -50,6 +50,10 @@ pipeline {
  //       )
  //    }
       steps {
+        foo = sh(
+              returnStdout: true, 
+              script: 'cat /var/jenkins_home/workspace/to-do-app_main/terraform/kubeconfig_my-cluster'
+            )
         dir('terraform') {
           withAWS(credentials:'aws_cred', region:'eu-west-3') {
   //        sh 'terraform init'
@@ -61,10 +65,7 @@ pipeline {
   //            echo $foo
   //            kubectl get pods
   //            """
-            foo = sh(
-              returnStdout: true, 
-              script: 'cat /var/jenkins_home/workspace/to-do-app_main/terraform/kubeconfig_my-cluster'
-            )
+            
             sh 'echo dsfhkdj'
             sh 'echo $foo'
   //          )
