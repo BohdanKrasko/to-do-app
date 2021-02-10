@@ -43,7 +43,7 @@ pipeline {
         expression { params.REQUESTED_ACTION == 'deploy'}
       }
       environment { 
-        KUBECONFIG= sh (returnStdout: true, script: 'cat /var/jenkins_home/workspace/to-do-app_main/terraform/kubeconfig_my-cluster').trim()
+        KUBECONFIG= sh (returnStdout: true, script: 'cat /var/jenkins_home/workspace/to-do-app_main/terraform/kubeconfig_my-cluster')
       }
       steps {
         dir('terraform') {
