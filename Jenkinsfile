@@ -49,9 +49,14 @@ pipeline {
   //        sh 'terraform init'
   //        sh 'terraform plan'
   //        sh 'terraform apply -auto-approve'
-            sh 'pwd'
-            sh 'export KUBECONFIG=/var/jenkins_home/workspace/to-do-app_main/terraform/kubeconfig_my-cluster'
-            sh 'kubectl get pods'
+            sh (
+              label: "Kube"
+              script: """#!/usr/bin/env bash
+              export KUBECONFIG=/var/jenkins_home/workspace/to-do-app_main/terraform/kubeconfig_my-cluster
+              echo $KUBECONFIG
+              kubectl get pods
+              """
+            )
           }
         }
       }
