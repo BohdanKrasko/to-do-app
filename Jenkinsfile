@@ -48,14 +48,14 @@ pipeline {
  //         returnStdout: true, 
  //         script: 'cat /var/jenkins_home/workspace/to-do-app_main/terraform/kubeconfig_my-cluster'
  //       )
-        script {
+     
               foo = sh(
                 returnStdout: true, 
                 script: 'echo "$(cat /var/jenkins_home/workspace/to-do-app_main/terraform/kubeconfig_my-cluster)"'
               )
               sh 'echo dsfhkdj'
               sh 'echo $foo'
-            }
+            
      }
 
       steps {
