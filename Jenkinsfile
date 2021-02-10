@@ -69,9 +69,11 @@ pipeline {
   //            echo $foo
   //            kubectl get pods
   //            """
-            sh 'echo dkj'
-            sh 'echo $KUBECONFIG'
-            sh 'kubectl get pods'
+            withEnv(["KUBECONFIG=/var/jenkins_home/workspace/to-do-app_main/terraform/kubeconfig_my-cluster"]) {
+              // Your stuff here
+              sh 'kubectl get pods'
+            }
+            
   //          )
           }
         }
