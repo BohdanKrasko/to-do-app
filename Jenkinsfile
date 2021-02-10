@@ -54,8 +54,6 @@ pipeline {
             sh (
               label: "Kube",
               script: """#!/usr/bin/env bash
-              
-              echo $KUBECONFIG
               kubectl get pods
               """
             )
