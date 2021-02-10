@@ -70,7 +70,7 @@ pipeline {
               helm repo update
               helm install ingress-nginx ingress-nginx/ingress-nginx
               kubectl apply -f app
-              sleep(time:10, unit:"SECONDS")
+              sleep 10
               kubectl apply -f ingress
               """
             )
