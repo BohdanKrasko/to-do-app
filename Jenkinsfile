@@ -41,21 +41,21 @@ pipeline {
     }
   }  
 
-//    stage('Terrafom') {
-//      when {
-//        expression { params.REQUESTED_ACTION == 'deploy'}
-//      }
-//      steps {
-//        
-//        dir('terraform') {
-//          withAWS(credentials:'aws_cred', region:'eu-west-3') {
-//            sh 'terraform init'
-//            sh 'terraform plan'
-//            sh 'terraform apply -auto-approve'
-//         }
-//        }
-//      }
-//    }
+    stage('Terrafom') {
+      when {
+        expression { params.REQUESTED_ACTION == 'deploy'}
+      }
+      steps {
+        
+        dir('terraform') {
+          withAWS(credentials:'aws_cred', region:'eu-west-3') {
+            sh 'terraform init'
+            sh 'terraform plan'
+            sh 'terraform apply -auto-approve'
+         }
+        }
+      }
+    }
     
     stage('Deploy todo app in EKS cluster') {
       when {
