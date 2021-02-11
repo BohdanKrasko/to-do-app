@@ -73,7 +73,7 @@ pipeline {
               helm install ingress-nginx ingress-nginx/ingress-nginx
               kubectl apply -f app/mongo.yml
               helm install go helm/to-do-backend
-              helm install react react-to-do
+              helm install react helm/react-to-do
               """
           )
         }
