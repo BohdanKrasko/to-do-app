@@ -71,6 +71,7 @@ pipeline {
                 helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
                 helm repo update
                 helm install ingress-nginx ingress-nginx/ingress-nginx
+                sleep 30
                 kubectl apply -f app/mongo.yml
                 helm install go helm/to-do-backend
                 helm install react helm/react-to-do
