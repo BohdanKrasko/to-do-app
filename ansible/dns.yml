@@ -1,13 +1,20 @@
 - name: create A record
-  hosts: localhost
-  gather_facts: no
-  vars:
-    hosted_zone_id: "kjhskhkksd"
-    dns_name: "mnmncknakn"
-  
-  tasks:
-    - name: Gather information about all ELBs
-      community.aws.ec2_elb_info:
-      register: elb_info
-    - debug:
-        msg: "{{ elb_info }}"
+  hosts: localhost
+  gather_facts: no
+  vars:
+    hosted_zone_id: "kjhskhkksd"
+    dns_name: "mnmncknakn"
+  
+  tasks:
+    - name: vars
+      shell: aws elb describe-load-balancers > vars/vars.json
+    - name: include vars
+      include_vars: vars.json
+    - debug:
+        msg: "{{ LoadBalancerDescriptions[0].DNSName }}"
+    - name: create json
+      template:
+        src: record.json.j2
+        dest: /Users/bkras/Desktop/to-do-app/ansible/record.json
+    - name: add A record
+      shell: aws route53 change-resource-record-sets --hosted-zone-id Z05340611QTGXY4HN6R2I --change-batch file://record.json
