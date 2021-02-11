@@ -63,25 +63,37 @@ pipeline {
       }
       steps {
         dir('kubernetes') {
-        withAWS(credentials:'aws_cred', region:'eu-west-3') {
-          withEnv(["KUBECONFIG=/var/jenkins_home/workspace/to-do-app_main/terraform/kubeconfig_my-cluster"]) {
-            sh (
-              label: 'Run app',
-              script: """#!/usr/bin/env bash 
-              helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
-              helm repo update
-              helm install ingress-nginx ingress-nginx/ingress-nginx
-              kubectl apply -f app/mongo.yml
-              helm install go helm/to-do-backend
-              helm install react helm/react-to-do
-              """
-          )
+          withAWS(credentials:'aws_cred', region:'eu-west-3') {
+            withEnv(["KUBECONFIG=/var/jenkins_home/workspace/to-do-app_main/terraform/kubeconfig_my-cluster"]) {
+              sh (
+                label: 'Run app',
+                script: """#!/usr/bin/env bash 
+                helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+                helm repo update
+                helm install ingress-nginx ingress-nginx/ingress-nginx
+                kubectl apply -f app/mongo.yml
+                helm install go helm/to-do-backend
+                helm install react helm/react-to-do
+                """
+            )
+          }
         }
       }
     }
   }
-  }
   
+    stage('Ansible add A record') {
+      when {
+        expression { params.REQUESTED_ACTION == 'deploy'}
+      }
+      steps {
+        dir('ansible') {
+          withAWS(credentials:'aws_cred', region:'eu-west-3') {
+            sh 'ansible-playbook dns.yml'
+          }
+        }
+      }
+    }  
 //    stage('Add A record') {
 //      steps {
 //        script {
