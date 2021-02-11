@@ -7,7 +7,8 @@ pipeline {
   environment {
     registry = "127.0.0.1:8082/repository/krasko"
     registryCredential = "cred"
-    dockerImage = ''
+    dockerImageBackand = ''
+    dockerImageFrontend = ''
     SONARQUBE_LOGN_PROJECT = credentials('sonarqube_login_project')
   }
   parameters {
@@ -39,8 +40,44 @@ pipeline {
     steps {
       git([url: 'https://github.com/BohdanKrasko/to-do-app', branch: 'main', credentialsId: 'to-do-app-github'])
     }
-  }  
-
+  }
+    
+  stage('Deploy frontend image') {
+      when {
+        expression { params.REQUESTED_ACTION == 'deploy'}
+      }
+      steps {
+        script {
+          
+          dir('app/client') {
+            dockerImageFrontend = docker.build registry + ":frontend_" + "$BUILD_NUMBER"
+          }
+          
+          docker.withRegistry( 'http://127.0.0.1:8082', registryCredential ) {
+            dockerImageFrontend.push()
+          }
+        }
+      }
+    }
+    
+    stage('Deploy backend image') {
+      when {
+        expression { params.REQUESTED_ACTION == 'deploy'}
+      }
+      steps {
+        script {
+          
+          dir('app/go-server') {
+            dockerImageBackand = docker.build registry + ":backend_" + "$BUILD_NUMBER"
+          }
+          
+          docker.withRegistry( 'http://127.0.0.1:8082', registryCredential ) {
+            dockerImageBackand.push()
+          }
+        }
+      }
+    }
+    
     stage('Terrafom') {
       when {
         expression { params.REQUESTED_ACTION == 'deploy'}
@@ -73,8 +110,8 @@ pipeline {
                 helm install ingress-nginx ingress-nginx/ingress-nginx
                 sleep 30
                 kubectl apply -f app/mongo.yml
-                helm install go helm/to-do-backend
-                helm install react helm/react-to-do
+                helm install go helm/to-do-backend --set imageNamne=$dockerImageBackand
+                helm install react helm/react-to-do --set imageName=$dockerImageFrontend
                 """
             )
           }
