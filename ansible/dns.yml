@@ -1,0 +1,13 @@
+- name: create A record
+  hosts: localhost
+  gather_facts: no
+  vars:
+    hosted_zone_id: "kjhskhkksd"
+    dns_name: "mnmncknakn"
+  
+  tasks:
+    - name: Gather information about all ELBs
+      community.aws.ec2_elb_info:
+      register: elb_info
+    - debug:
+        msg: "{{ elb_info }}"
