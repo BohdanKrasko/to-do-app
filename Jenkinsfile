@@ -177,9 +177,8 @@ pipeline {
           withAWS(credentials:'aws_cred', region:'eu-west-3') {
             sh 'terraform destroy -auto-approve'
          }
-        }
-     }
-     
+       }
+     } 
    }
 //    stage('Add A record') {
 //      steps {
