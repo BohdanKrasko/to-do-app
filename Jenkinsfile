@@ -5,7 +5,9 @@ pipeline {
   agent any
   
   environment {
-    registry = "127.0.0.1:8082/repository/krasko"
+    //registry = "127.0.0.1:8082/repository/krasko"
+    registry = "2879fbb1a708.ngrok.io/repository/krasko"
+    nexusServer = "http://2879fbb1a708.ngrok.io"
     registryCredential = "cred"
     dockerImageBackand = ''
     dockerImageFrontend = ''
@@ -53,7 +55,7 @@ pipeline {
             dockerImageFrontend = docker.build registry + ":frontend_" + "$BUILD_NUMBER"
           }
           
-          docker.withRegistry( 'http://127.0.0.1:8082', registryCredential ) {
+          docker.withRegistry( nexusServer, registryCredential ) {
             dockerImageFrontend.push()
           }
         }
@@ -71,7 +73,7 @@ pipeline {
             dockerImageBackand = docker.build registry + ":backend_" + "$BUILD_NUMBER"
           }
           
-          docker.withRegistry( 'http://127.0.0.1:8082', registryCredential ) {
+          docker.withRegistry( nexusServer, registryCredential ) {
             dockerImageBackand.push()
           }
         }
@@ -109,6 +111,7 @@ pipeline {
                 helm repo update
                 helm install ingress-nginx ingress-nginx/ingress-nginx
                 sleep 30
+                kubectl create secret docker-registry regcred --docker-server=2879fbb1a708.ngrok.io --docker-username=admin --docker-password=admin123
                 kubectl apply -f app/mongo.yml
                 helm install go helm/to-do-backend --set imageNamne=$dockerImageBackand
                 helm install react helm/react-to-do --set imageName=$dockerImageFrontend
