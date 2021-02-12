@@ -17,6 +17,8 @@ spec:
         app: todo
         tier: backend-to-do
     spec:
+      imagePullSecrets:
+        - name: regcred
       containers:
         - name: backend-to-do
           image: {{ .Values.imageName }}
