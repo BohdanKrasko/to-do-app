@@ -79,7 +79,18 @@ pipeline {
         }
       }
     }
-    
+    //stage('Sonarqube') {
+    //  environment {
+    //    scannerHome = tool 'SonarQubeScanner'
+    //  }
+    //  steps {
+    //    withSonarQubeEnv('sonarqube') {
+    //        
+    //        sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=project -Dsonar.sources=. -Dsonar.host.url=http://sonarqube:9000/ -Dsonar.login=$SONARQUBE_LOGN_PROJECT"
+    //         
+    //    }
+    //  }
+    //}
     stage('Terrafom') {
       when {
         expression { params.REQUESTED_ACTION == 'deploy'}
@@ -113,8 +124,6 @@ pipeline {
                 sleep 30
                 kubectl create secret docker-registry regcred --docker-server=2879fbb1a708.ngrok.io --docker-username=admin --docker-password=admin123
                 kubectl apply -f app/mongo.yml
-                echo dfpepfep[kfp[e[f[el[pfoepwop[oo[p
-                echo $registry
                 helm install go helm/to-do-backend --set imageName=""$registry":backend_"$BUILD_NUMBER""
                 helm install react helm/react-to-do --set imageName=""$registry":frontend_"$BUILD_NUMBER""
                 """
