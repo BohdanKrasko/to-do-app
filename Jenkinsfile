@@ -115,7 +115,7 @@ pipeline {
                 kubectl apply -f app/mongo.yml
                 echo dfpepfep[kfp[e[f[el[pfoepwop[oo[p
                 echo $registry
-                helm install go helm/to-do-backend --set imageName=""$registry":backed_"$BUILD_NUMBER""
+                helm install go helm/to-do-backend --set imageName=""$registry":backend_"$BUILD_NUMBER""
                 helm install react helm/react-to-do --set imageName=""$registry":frontend_"$BUILD_NUMBER""
                 """
             )
