@@ -163,6 +163,7 @@ pipeline {
                 kubectl delete secret regcred
                 kubectl delete -f kubernetes/app/mongo.yml
                 """
+            )
           }
         }
       } 
