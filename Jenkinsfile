@@ -145,7 +145,42 @@ pipeline {
           }
         }
       }
-    }  
+    }
+    
+    stage('Destroy app') {
+      when {
+        expression { params.REQUESTED_ACTION == 'destroy'}
+      }
+      steps {
+        withAWS(credentials:'aws_cred', region:'eu-west-3') {
+          withEnv(["KUBECONFIG=/var/jenkins_home/workspace/to-do-app_main/terraform/kubeconfig_my-cluster"]) { 
+            sh (
+                label: 'Run app',
+                script: """#!/usr/bin/env bash
+                helm install react
+                helm install go
+                helm install ingress-nginx
+                kubectl delete secret regcred
+                kubectl delete -f kubernetes/app/mongo.yml
+                """
+          }
+        }
+      } 
+    }
+    
+   stage('Destroy cluster') {
+     when {
+        expression { params.REQUESTED_ACTION == 'destroy'}
+     }
+     steps {
+       dir('terraform') {
+          withAWS(credentials:'aws_cred', region:'eu-west-3') {
+            sh 'terraform destroy -auto-approve'
+         }
+        }
+     }
+     
+   }
 //    stage('Add A record') {
 //      steps {
 //        script {
