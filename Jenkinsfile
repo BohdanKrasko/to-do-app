@@ -113,10 +113,10 @@ pipeline {
                 sleep 30
                 kubectl create secret docker-registry regcred --docker-server=2879fbb1a708.ngrok.io --docker-username=admin --docker-password=admin123
                 kubectl apply -f app/mongo.yml
-                echo $dockerImageBackand
-                echo $dockerImageFrontend
-                helm install go helm/to-do-backend --set imageNamne=$dockerImageBackand
-                helm install react helm/react-to-do --set imageName=$dockerImageFrontend
+                echo dfpepfep[kfp[e[f[el[pfoepwop[oo[p
+                echo $registry
+                helm install go helm/to-do-backend --set imageNamne=$registry + ":backed_" + $BUILD
+                helm install react helm/react-to-do --set imageName="$registry + :frontend + $BUILD"
                 """
             )
           }
