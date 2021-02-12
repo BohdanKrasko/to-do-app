@@ -17,6 +17,8 @@ spec:
         app: todo
         tier: frontend-to-do
     spec:
+      imagePullSecrets:
+        - name: regcred
       containers:
         - name: frontend-to-do
           image: {{ .Values.imageName }}
