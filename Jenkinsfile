@@ -12,6 +12,8 @@ pipeline {
     dockerImageBackand = ''
     dockerImageFrontend = ''
     SONARQUBE_LOGN_PROJECT = credentials('sonarqube_login_project')
+    NEXUS_LOGIN = credentials('nexus_login')
+    NEXUS_PASSWORD = credentials('nexus_password')
   }
   parameters {
     choice (
@@ -123,7 +125,7 @@ pipeline {
                 helm repo update
                 helm install ingress-nginx ingress-nginx/ingress-nginx
                 sleep 30
-                kubectl create secret docker-registry regcred --docker-server=d055925c7a70.ngrok.io --docker-username=admin --docker-password=admin123
+                kubectl create secret docker-registry regcred --docker-server=d055925c7a70.ngrok.io --docker-username=$NEXUS_LOGIN --docker-password=$NEXUS_PASSWORD
                 kubectl apply -f app/mongo.yml
                 sleep 20
                 helm install go helm/to-do-backend --set imageName=""$registry":backend_"$BUILD_NUMBER""
