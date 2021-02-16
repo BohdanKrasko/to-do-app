@@ -114,10 +114,11 @@ pipeline {
       steps {
         dir('kubernetes') {
           withAWS(credentials:'aws_cred', region:'eu-west-3') {
-            withEnv(["KUBECONFIG=/var/jenkins_home/workspace/to-do-app_main/terraform/kubeconfig_my-cluster"]) {
+           // withEnv(["KUBECONFIG=/var/jenkins_home/workspace/to-do-app_main/terraform/kubeconfig_my-cluster"]) {
               sh (
                 label: 'Run app',
                 script: """#!/usr/bin/env bash 
+                aws eks --region eu-west-3 update-kubeconfig --name my-cluster
                 helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
                 helm repo update
                 helm install ingress-nginx ingress-nginx/ingress-nginx
@@ -129,7 +130,7 @@ pipeline {
                 helm install react helm/react-to-do --set imageName=""$registry":frontend_"$BUILD_NUMBER""
                 """
             )
-          }
+          //}
         }
       }
     }
@@ -154,7 +155,7 @@ pipeline {
       }
       steps {
         withAWS(credentials:'aws_cred', region:'eu-west-3') {
-          withEnv(["KUBECONFIG=/var/jenkins_home/workspace/to-do-app_main/terraform/kubeconfig_my-cluster"]) { 
+          //withEnv(["KUBECONFIG=/var/jenkins_home/workspace/to-do-app_main/terraform/kubeconfig_my-cluster"]) { 
             sh (
                 label: 'Run app',
                 script: """#!/usr/bin/env bash
@@ -165,7 +166,7 @@ pipeline {
                 kubectl delete -f kubernetes/app/mongo.yml
                 """
             )
-          }
+          //}
         }
       } 
     }
