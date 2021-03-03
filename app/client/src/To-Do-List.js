@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import axios from "axios";
 import { Card, Header, Form, Input, Icon } from "semantic-ui-react";
 
-let endpoint = "http://ekstodoapp.tk";
+//let endpoint = "http://ekstodoapp.tk";
+let endpoint = process.env.REACT_APP_HOST;
 
 class ToDoList extends Component {
   constructor(props) {
