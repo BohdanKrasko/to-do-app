@@ -3,8 +3,8 @@ pipeline {
     
     environment {
         //registry = "127.0.0.1:8082/repository/krasko"
-        registry = "2536f8ab9d87.ngrok.io/repository/"
-        nexusServer = "http://2536f8ab9d87.ngrok.io"
+        registry = "b0e37741d8d0.ngrok.io/repository/"
+        nexusServer = "http://b0e37741d8d0.ngrok.io"
         registryCredential = "cred"
         prod_s3_bucket_name = "prod-s3-bucket-frontend-todo-app-www.ekstodoapp.tk"
         stage_s3_bucket_name = "stage-s3-bucket-frontend-todo-app-www.ekstodoapp.tk"
