@@ -24,6 +24,13 @@ pipeline {
     }
     stages {
         
+        stage('Branch name') {
+            steps {
+                echo 'Pulling... ' + env.GIT_BRANCH
+            }
+        }
+        
+        /*
         stage('Sent notification to Slack') {
             steps {
                 script {
@@ -139,6 +146,7 @@ pipeline {
                 notifyBuild(currentBuild.result)
             }
         }
+        */
     }
 }
 
