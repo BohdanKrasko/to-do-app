@@ -2,7 +2,6 @@ pipeline {
     agent any
     
     environment {
-        //registry = "127.0.0.1:8082/repository/krasko"
         nexus = "ca1559425417.ngrok.io"
         registry = "${nexus}/repository/"
         nexusServer = "http://${nexus}"
@@ -85,16 +84,6 @@ pipeline {
                     } else {
                         deploy_job("${stage_s3_bucket_name}", 'stage')
                     }
-                    /*
-                    def releaseJob = build job: 'down',
-                    parameters: [
-                        [ $class: 'StringParameterValue', name: 'REQUESTED_ACTION', value: "${params.REQUESTED_ACTION}" ],
-                        [ $class: 'StringParameterValue', name: 'GO_IMAGE', value: "${registry}backend:${BUILD_NUMBER}" ],
-                        [ $class: 'StringParameterValue', name: 'S3_BUCKET_NAME', value: "${stage_s3_bucket_name}" ],
-                        [ $class: 'StringParameterValue', name: 'DIR', value: "stage/app" ]
-                    ]
-                    */
-                   
                 }
             }
         }
@@ -121,55 +110,8 @@ pipeline {
                     }
                 }
             }
-        }
-       /*
-        stage('Add fronted to S3 to stage') {
-          when {
-            expression { params.REQUESTED_ACTION == 'deploy'}
-          }
-          steps {
-              dir('app/client') {
-                sh "yarn install"
-                sh "REACT_APP_HOST=https://stage.go.ekstodoapp.tk yarn build && aws s3 sync build/ s3://${stage_s3_bucket_name}"
-            }
-          }
-        }
-        
-        
-        stage('Deploy Prod') {
-            steps {
-                script {
-                    def releaseJob = build job: 'down',
-                    parameters: [
-                        [ $class: 'StringParameterValue', name: 'REQUESTED_ACTION', value: "${params.REQUESTED_ACTION}" ],
-                        [ $class: 'StringParameterValue', name: 'GO_IMAGE', value: "${registry}backend:${BUILD_NUMBER}" ],
-                        [ $class: 'StringParameterValue', name: 'S3_BUCKET_NAME', value: "${prod_s3_bucket_name}" ],
-                        [ $class: 'StringParameterValue', name: 'DIR', value: "prod/app" ]
-                    ]
-                    
-                    if (releaseJob.result == "SUCCESS") {
-                        echo "SUCCESS downstream job"
-                    } else {
-                        echo "Error"
-                    }
-                }
-            }
-        }
-        
-        stage('Add fronted to S3 to prod') {
-          when {
-            expression { params.REQUESTED_ACTION == 'deploy'}
-          }
-          steps {
-              dir('app/client') {
-                sh "yarn install"
-                sh "REACT_APP_HOST=https://prod.go.ekstodoapp.tk yarn build && aws s3 sync build/ s3://${prod_s3_bucket_name}"
-            }
-          }
-        }
-        
+        }   
     }
-    
     
     post {
         always {
@@ -177,13 +119,12 @@ pipeline {
                 notifyBuild(currentBuild.result)
             }
         }
-        */
     }
 }
 
 def notifyBuild(String buildStatus = 'STARTED') {
   // build status of null means successful
-  buildStatus =  buildStatus ?: 'SUCCESSFUL'
+  buildStatus =  buildStatus ?: 'SUCCESS'
 
   // Default values
   def colorName = 'RED'
