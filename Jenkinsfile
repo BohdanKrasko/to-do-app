@@ -1,10 +1,12 @@
+@Library("my-shared-library")_
+
 pipeline {
     agent any
     
     environment {
-        //registry = "127.0.0.1:8082/repository/krasko"
-        registry = "b0e37741d8d0.ngrok.io/repository/"
-        nexusServer = "http://b0e37741d8d0.ngrok.io"
+        nexus = "ca1559425417.ngrok.io"
+        registry = "${nexus}/repository/"
+        nexusServer = "http://${nexus}"
         registryCredential = "cred"
         prod_s3_bucket_name = "prod-s3-bucket-frontend-todo-app-www.ekstodoapp.tk"
         stage_s3_bucket_name = "stage-s3-bucket-frontend-todo-app-www.ekstodoapp.tk"
@@ -23,7 +25,7 @@ pipeline {
         )
     }
     stages {
-        
+    
         stage('Sent notification to Slack') {
             steps {
                 script {
@@ -73,70 +75,45 @@ pipeline {
             }
           }
         }
-       
-       stage('Deploy Stage') {
+      
+       stage('Deploy') {
+            when {
+                expression { params.REQUESTED_ACTION == 'deploy'}
+            }
             steps {
                 script {
-                    def releaseJob = build job: 'down',
-                    parameters: [
-                        [ $class: 'StringParameterValue', name: 'REQUESTED_ACTION', value: "${params.REQUESTED_ACTION}" ],
-                        [ $class: 'StringParameterValue', name: 'GO_IMAGE', value: "${registry}backend:${BUILD_NUMBER}" ],
-                        [ $class: 'StringParameterValue', name: 'S3_BUCKET_NAME', value: "${stage_s3_bucket_name}" ],
-                        [ $class: 'StringParameterValue', name: 'DIR', value: "stage/app" ]
-                    ]
-                    
-                    if (releaseJob.result == "SUCCESS") {
-                        echo "SUCCESS downstream job"
+                    if ("${GIT_BRANCH}" == "main") {
+                        deploy_job("${prod_s3_bucket_name}", 'prod')
                     } else {
-                        echo "Error"
+                        deploy_job("${stage_s3_bucket_name}", 'stage')
                     }
                 }
             }
         }
         
-        stage('Add fronted to S3 to stage') {
-          when {
-            expression { params.REQUESTED_ACTION == 'deploy'}
-          }
-          steps {
-              dir('app/client') {
-                sh "yarn install"
-                sh "REACT_APP_HOST=https://stage.go.ekstodoapp.tk yarn build && aws s3 sync build/ s3://${stage_s3_bucket_name}"
+        stage('Destroy') {
+            when {
+               expression { params.REQUESTED_ACTION == 'destroy'}
             }
-          }
-        }
-        
-        stage('Deploy Prod') {
             steps {
                 script {
-                    def releaseJob = build job: 'down',
-                    parameters: [
-                        [ $class: 'StringParameterValue', name: 'REQUESTED_ACTION', value: "${params.REQUESTED_ACTION}" ],
-                        [ $class: 'StringParameterValue', name: 'GO_IMAGE', value: "${registry}backend:${BUILD_NUMBER}" ],
-                        [ $class: 'StringParameterValue', name: 'S3_BUCKET_NAME', value: "${prod_s3_bucket_name}" ],
-                        [ $class: 'StringParameterValue', name: 'DIR', value: "prod/app" ]
-                    ]
+                    def userInput = input(
+                        id: 'userInput', message: "Destroy enviroment", parameters: [
+                        [$class: 'BooleanParameterDefinition', defaultValue: false, description: '', name: 'Please confirm you sure to destroy ']
+                    ])
+
+                    if(!userInput) {
+                        error "Destroy wasn't confirmed"
+                    }
                     
-                    if (releaseJob.result == "SUCCESS") {
-                        echo "SUCCESS downstream job"
+                    if ("${GIT_BRANCH}" == "main") {
+                        destroy_job('prod')
                     } else {
-                        echo "Error"
+                        destroy_job('stage')
                     }
                 }
             }
-        }
-        
-        stage('Add fronted to S3 to prod') {
-          when {
-            expression { params.REQUESTED_ACTION == 'deploy'}
-          }
-          steps {
-              dir('app/client') {
-                sh "yarn install"
-                sh "REACT_APP_HOST=https://prod.go.ekstodoapp.tk yarn build && aws s3 sync build/ s3://${prod_s3_bucket_name}"
-            }
-          }
-        }
+        }   
     }
     
     post {
@@ -147,30 +124,4 @@ pipeline {
         }
        
     } 
-}
-
-def notifyBuild(String buildStatus = 'STARTED') {
-  // build status of null means successful
-  buildStatus =  buildStatus ?: 'SUCCESSFUL'
-
-  // Default values
-  def colorName = 'RED'
-  def colorCode = '#FF0000'
-  def subject = "${buildStatus}: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'"
-  def summary = "${subject} (${env.BUILD_URL})"
-
-  // Override default values based on build status
-  if (buildStatus == 'STARTED') {
-    color = 'YELLOW'
-    colorCode = '#FFFF00'
-  } else if (buildStatus == 'SUCCESS') {
-    color = 'GREEN'
-    colorCode = '#00FF00'
-  } else {
-    color = 'RED'
-    colorCode = '#FF0000'
-  }
-
-  // Send notifications
-  slackSend (color: colorCode, message: summary)
 }
