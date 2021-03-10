@@ -23,7 +23,7 @@ pipeline {
         )
     }
     stages {
-        
+        /*
         stage('Sent notification to Slack') {
             steps {
                 script {
@@ -31,7 +31,7 @@ pipeline {
                 }
             }
         }
-        
+        */
         stage('Clean workspace') {
             when {
               expression { params.REQUESTED_ACTION == 'deploy'}
@@ -41,6 +41,12 @@ pipeline {
             }
         }
         
+        stage('Branch name') {
+            steps {
+                echo 'Pulling... ' + env.GIT_BRANCH
+            }
+        }
+        /*
         stage('Pull from github') {
             when {
               expression { params.REQUESTED_ACTION == 'deploy'}
@@ -140,6 +146,7 @@ pipeline {
             }
         }
     }
+    */
 }
 
 def notifyBuild(String buildStatus = 'STARTED') {
