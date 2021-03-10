@@ -105,6 +105,15 @@ pipeline {
             }
             steps {
                 script {
+                    def userInput = input(
+                        id: 'userInput', message: "Destroy enviroment", parameters: [
+                        [$class: 'BooleanParameterDefinition', defaultValue: false, description: '', name: 'Please confirm you sure to destroy ']
+                    ])
+
+                    if(!userInput) {
+                        error "Destroy wasn't confirmed"
+                    }
+                    
                     if ("${GIT_BRANCH}" == "main") {
                         destroy_job('prod')
                     } else {
