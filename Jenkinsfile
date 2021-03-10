@@ -92,11 +92,6 @@ pipeline {
                         [ $class: 'StringParameterValue', name: 'DIR', value: "stage/app" ]
                     ]
                     */
-                    if (deploy_job.result == "SUCCESS") {
-                        echo "SUCCESS downstream job"
-                    } else {
-                        echo "Error"
-                    }
                 }
             }
         }
