@@ -43,12 +43,6 @@ pipeline {
             }
         }
         
-        stage('Branch name') {
-            steps {
-                echo 'Pulling... ' + env.GIT_BRANCH
-            }
-        }
-        
         stage('Pull from github') {
             when {
               expression { params.REQUESTED_ACTION == 'deploy'}
