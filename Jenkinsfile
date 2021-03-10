@@ -27,10 +27,10 @@ pipeline {
         
         stage('Branch name') {
             steps {
-                echo 'Pulling... ' + env.GIT_BRANCH
+                echo "Pulling... ${GIT_BRANCH}"
             }
         }
-        
+        /*
         stage('Sent notification to Slack') {
             steps {
                 script {
@@ -74,7 +74,7 @@ pipeline {
             }
           }
         }
-       
+      
        stage('Deploy') {
             steps {
                 script {
@@ -83,7 +83,7 @@ pipeline {
                     } else {
                         deploy_job("${stage_s3_bucket_name}", 'stage')
                     }
-                    /*
+                    
                     def releaseJob = build job: 'down',
                     parameters: [
                         [ $class: 'StringParameterValue', name: 'REQUESTED_ACTION', value: "${params.REQUESTED_ACTION}" ],
@@ -91,11 +91,11 @@ pipeline {
                         [ $class: 'StringParameterValue', name: 'S3_BUCKET_NAME', value: "${stage_s3_bucket_name}" ],
                         [ $class: 'StringParameterValue', name: 'DIR', value: "stage/app" ]
                     ]
-                    */
+                   
                 }
             }
         }
-       /* 
+       
         stage('Add fronted to S3 to stage') {
           when {
             expression { params.REQUESTED_ACTION == 'deploy'}
@@ -140,7 +140,7 @@ pipeline {
             }
           }
         }
-        */
+        
     }
     
     post {
@@ -149,6 +149,7 @@ pipeline {
                 notifyBuild(currentBuild.result)
             }
         }
+        */
     }
 }
 
