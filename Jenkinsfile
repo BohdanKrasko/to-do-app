@@ -101,14 +101,14 @@ pipeline {
         
         stage('Destroy') {
             when {
-               expression { params.REQUESTED_ACTION == 'deploy'}
+               expression { params.REQUESTED_ACTION == 'destroy'}
             }
             steps {
                 script {
                     if ("${GIT_BRANCH}" == "main") {
-                        deploy_job('prod')
+                        destroy_job('prod')
                     } else {
-                        deploy_job('stage')
+                        destroy_job('stage')
                     }
                 }
             }
