@@ -79,9 +79,9 @@ pipeline {
             steps {
                 script {
                     if (env.GIT_BRANCH == "main") {
-                        deploy_job("${prod_s3_bucket_name}", 'prod/app')
+                        deploy_job("${prod_s3_bucket_name}", 'prod')
                     } else {
-                        deploy_job("${stage_s3_bucket_name}", 'stage/app')
+                        deploy_job("${stage_s3_bucket_name}", 'stage')
                     }
                     /*
                     def releaseJob = build job: 'down',
@@ -95,7 +95,7 @@ pipeline {
                 }
             }
         }
-        
+       /* 
         stage('Add fronted to S3 to stage') {
           when {
             expression { params.REQUESTED_ACTION == 'deploy'}
@@ -107,7 +107,7 @@ pipeline {
             }
           }
         }
-        
+        */
         /*
         stage('Deploy Prod') {
             steps {
@@ -178,12 +178,12 @@ def notifyBuild(String buildStatus = 'STARTED') {
   slackSend (color: colorCode, message: summary)
 }
 
-def deploy_job(s3_bucket, dir) {
+def deploy_job(s3_bucket, env) {
     build job: 'down',
         parameters: [
             [ $class: 'StringParameterValue', name: 'REQUESTED_ACTION', value: "${params.REQUESTED_ACTION}" ],
             [ $class: 'StringParameterValue', name: 'GO_IMAGE', value: "${registry}backend:${BUILD_NUMBER}" ],
             [ $class: 'StringParameterValue', name: 'S3_BUCKET_NAME', value: "${s3_bucket}" ],
-            [ $class: 'StringParameterValue', name: 'DIR', value: "${dir}" ]
+            [ $class: 'StringParameterValue', name: 'ENV', value: "${env}" ]
         ]
 }
