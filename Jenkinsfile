@@ -78,7 +78,7 @@ pipeline {
        stage('Deploy') {
             steps {
                 script {
-                    if (env.GIT_BRANCH == "main") {
+                    if ("${BRANCH}" == "main") {
                         deploy_job("${prod_s3_bucket_name}", 'prod')
                     } else {
                         deploy_job("${stage_s3_bucket_name}", 'stage')
