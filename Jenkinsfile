@@ -75,6 +75,9 @@ pipeline {
         }
       
        stage('Deploy') {
+            when {
+                expression { params.REQUESTED_ACTION == 'deploy'}
+            }
             steps {
                 script {
                     if ("${GIT_BRANCH}" == "main") {
@@ -92,6 +95,21 @@ pipeline {
                     ]
                     */
                    
+                }
+            }
+        }
+        
+        stage('Destroy') {
+            when {
+               expression { params.REQUESTED_ACTION == 'deploy'}
+            }
+            steps {
+                script {
+                    if ("${GIT_BRANCH}" == "main") {
+                        deploy_job('prod')
+                    } else {
+                        deploy_job('stage')
+                    }
                 }
             }
         }
@@ -143,6 +161,7 @@ pipeline {
         
     }
     
+    
     post {
         always {
             script {
@@ -185,6 +204,13 @@ def deploy_job(s3_bucket, env) {
             [ $class: 'StringParameterValue', name: 'REQUESTED_ACTION', value: "${params.REQUESTED_ACTION}" ],
             [ $class: 'StringParameterValue', name: 'GO_IMAGE', value: "${registry}backend:${BUILD_NUMBER}" ],
             [ $class: 'StringParameterValue', name: 'S3_BUCKET_NAME', value: "${s3_bucket}" ],
+            [ $class: 'StringParameterValue', name: 'ENV', value: "${env}" ]
+        ]
+}
+
+def destroy_job(env) {
+    build job: 'cleanJob',
+        parameters: [
             [ $class: 'StringParameterValue', name: 'ENV', value: "${env}" ]
         ]
 }
