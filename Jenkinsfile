@@ -4,17 +4,14 @@ pipeline {
     agent any
     
     environment {
-        nexus = "656f38538942.ngrok.io"
+        nexus = "62ca4ba91d9d.ngrok.io"
         registry = "${nexus}/repository/"
         nexusServer = "http://${nexus}"
-        registryCredential = "cred"
+        registryCredential = "nexus_cred"
         prod_s3_bucket_name = "prod-s3-bucket-frontend-todo-app-www.ekstodoapp.tk"
         stage_s3_bucket_name = "stage-s3-bucket-frontend-todo-app-www.ekstodoapp.tk"
         dockerImageBackand = ''
         dockerImageFrontend = ''
-        SONARQUBE_LOGN_PROJECT = credentials('sonarqube_login_project')
-        NEXUS_LOGIN = credentials('nexus_login')
-        NEXUS_PASSWORD = credentials('nexus_password')
     }
   
     parameters {
@@ -48,7 +45,7 @@ pipeline {
               expression { params.REQUESTED_ACTION == 'deploy'}
             }
             steps {
-              git([url: 'https://github.com/BohdanKrasko/to-do-app', branch: 'main', credentialsId: 'to-do-app-github'])
+              git([url: 'git@github.com:BohdanKrasko/to-do-app.git', branch: 'main', credentialsId: 'github_cred'])
             }
         }
         
