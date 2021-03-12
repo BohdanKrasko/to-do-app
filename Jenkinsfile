@@ -48,7 +48,7 @@ pipeline {
               expression { params.REQUESTED_ACTION == 'deploy'}
             }
             steps {
-              git([url: 'https://github.com/BohdanKrasko/to-do-app', branch: 'main', credentialsId: 'to-do-app-github'])
+              git([url: 'git@github.com:BohdanKrasko/to-do-app.git', branch: 'main', credentialsId: 'github_cred'])
             }
         }
         
