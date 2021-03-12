@@ -12,9 +12,9 @@ pipeline {
         stage_s3_bucket_name = "stage-s3-bucket-frontend-todo-app-www.ekstodoapp.tk"
         dockerImageBackand = ''
         dockerImageFrontend = ''
-        SONARQUBE_LOGN_PROJECT = credentials('sonarqube_login_project')
-        NEXUS_LOGIN = credentials('nexus_login')
-        NEXUS_PASSWORD = credentials('nexus_password')
+        //SONARQUBE_LOGN_PROJECT = credentials('sonarqube_login_project')
+        //NEXUS_LOGIN = credentials('nexus_login')
+        //NEXUS_PASSWORD = credentials('nexus_password')
     }
   
     parameters {
