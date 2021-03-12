@@ -7,7 +7,7 @@ pipeline {
         nexus = "656f38538942.ngrok.io"
         registry = "${nexus}/repository/"
         nexusServer = "http://${nexus}"
-        registryCredential = "cred"
+        registryCredential = "nexus_cred"
         prod_s3_bucket_name = "prod-s3-bucket-frontend-todo-app-www.ekstodoapp.tk"
         stage_s3_bucket_name = "stage-s3-bucket-frontend-todo-app-www.ekstodoapp.tk"
         dockerImageBackand = ''
