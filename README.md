@@ -1,25 +1,13 @@
 # to-do-app
-Install docker in Jenkins cointeiner 
 
-curl -o docker-ce-cli.deb https://download.docker.com/linux/debian/dists/stretch/pool/stable/amd64/docker-ce-cli_19.03.8~3-0~debian-stretch_amd64.deb && \
-    dpkg -i docker-ce-cli.deb && \
-    rm docker-ce-cli.deb
-  
-or create Dockerfile
-FROM jenkins/jenkins:lts
+#Example of deployment automatization
 
-# Switch to root as the base image switch to jenkins user
-USER root
+This app shows how to deploy to AWS ECS cluster using Terraform and Terragrunt
 
-# Download docker-cli and install it
-RUN curl -o docker-ce-cli.deb https://download.docker.com/linux/debian/dists/stretch/pool/stable/amd64/docker-ce-cli_19.03.8~3-0~debian-stretch_amd64.deb && \
-    dpkg -i docker-ce-cli.deb && \
-    rm docker-ce-cli.deb
+Also you can find in repository files how to deploy to AWS EKS ckuster 
 
-# Switch back to jenkins user
-USER jenkins
+Documentation how to set up enviroment and run app https://drive.google.com/file/d/19VOFMSqZPPEcRxiDG33IroqruIgFPLcR/view?usp=sharing
 
+Examples:
+![Screenshot 2021-03-12 at 12 44 56](https://user-images.githubusercontent.com/46019051/111764936-73979b00-88ac-11eb-81da-6fd3b7b52ee3.png)
 
-#SonarQube
-
-docker run -d --name sonarqube -p 9000:9000 -p 9092:9092 sonarqube
