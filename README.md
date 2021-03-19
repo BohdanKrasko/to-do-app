@@ -7,11 +7,15 @@ This example shows how to deploy app using Jenkins CI/CD to AWS ECS cluster usin
 Also you can find in repository files how to deploy to AWS EKS cluster 
 
 Documentation how to set up enviroment and run app https://drive.google.com/file/d/19VOFMSqZPPEcRxiDG33IroqruIgFPLcR/view?usp=sharing
+
 Additional repositorys for this app:
+  
   Terraform code:
     https://github.com/BohdanKrasko/infrastructure-modules
+  
   Terragrunt code:
     https://github.com/BohdanKrasko/todo-app-envs
+  
   Groovy functions:
     https://github.com/BohdanKrasko/groovy_func
 
