@@ -1,5 +1,12 @@
 # to-do-app
 
+Task:
+Create ECS cluster using Terraform
+
+Create two env using Terragrunt
+
+Deploy web app in EKS cluster using Jenkins CI/CD
+
 #Example of deployment automatization
 
 This example shows how to deploy app using Jenkins CI/CD to AWS ECS cluster using Terraform and Terragrunt
