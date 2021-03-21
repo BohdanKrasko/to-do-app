@@ -4,7 +4,7 @@ pipeline {
     agent any
     
     environment {
-        nexus = "40925ec8e02e.ngrok.io"
+        nexus = "6a674dcd3243.ngrok.io"
         registry = "${nexus}/repository/"
         nexusServer = "http://${nexus}"
         registryCredential = "nexus_cred"
